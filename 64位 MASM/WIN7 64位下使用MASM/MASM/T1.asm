@@ -1,0 +1,27 @@
+data segment
+data ends
+code segment
+	assume cs:code,ds:data
+	start:mov AX,DATA
+	mov ds,ax
+CALL TEST
+   TEST PROC
+	MOV AH,01H
+	INT 21H
+	CMP AL,41H
+	JB LOP1
+	CMP AL,5AH
+	JA LOP2
+	LOP2:MOV DL,'y'
+	MOV AH,02H
+	INT 21H
+	JMP EXIT
+	LOP1:MOV DL,'n'
+	MOV AH,02H
+	INT 21H
+	RET
+TEST ENDP
+	EXIT:MOV AH,4CH
+	INT 21H
+CODE ENDS 
+ENd START

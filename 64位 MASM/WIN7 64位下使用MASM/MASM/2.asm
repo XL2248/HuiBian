@@ -1,0 +1,80 @@
+data segment
+	x db ?
+	y db ?
+data ends
+code segment
+	assume cs:code,ds:data
+	s:mov ax,data
+	mov ds,ax
+	
+	l0:mov dl,0ah
+	mov ah,2
+	int 21h
+	mov dl,0dh
+	int 21h
+	mov ah,1
+	int 21h
+	sub al,30h
+	mov x,al
+	cmp x,3
+	jz l1
+	cmp x,4
+	jz l2
+	cmp x,5
+	jz l3
+	cmp x,6
+	jz l4
+	cmp x,0
+	jz l6
+	jmp l0
+
+	l1:mov al,x
+	mul x
+	add al,x
+	mov y,al
+	jmp l5
+	l2:mov al,x
+	mul x
+	sub al,x
+	sub al,x
+	mov y,al
+	jmp l5
+	l3:mov al,x
+	mul x
+	mov y,al
+	jmp l5
+	l4:mov al,x
+	mul x
+	mov bl,2
+	div bl
+	mov y,al
+
+	l5:mov dl,0ah
+	mov ah,2
+	int 21h
+	mov dl,0dh
+	int 21h
+	mov dl,y
+	mov cl,4
+	shr dl,cl
+	cmp dl,9
+	jle l7
+	add dl,7
+	l7:add dl,30h
+	mov ah,2
+	int 21h
+	mov dl,y
+	and dl,0fh
+	cmp dl,9
+	jle l8
+	add dl,7
+	l8:add dl,30h
+	mov ah,2
+	int 21h
+	jmp l0
+
+	l6:mov ah,4ch
+	int 21h
+code ends
+	end s
+	

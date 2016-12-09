@@ -1,0 +1,52 @@
+DATA SEGMENT    ;判断是否是大小写字母
+	STR1 DB "Please input a letter:",0DH,0AH,'$'
+	STR2 DB "This is a ENGLISH letter!",0DH,0AH,'$'
+	STR3 DB "This is not a ENGLISH letter!",0DH,0AH,'$'
+DATA ENDS
+CODE SEGMENT
+	ASSUME CS:CODE,DS:DATA
+START:MOV AX,DATA
+	MOV DS,AX
+
+	;输出字符串
+	LEA DX,STR1
+	MOV AH,09H
+	INT 21H 
+
+	;输入字符到AL
+	MOV AH,01H
+	INT 21H
+
+	;MOV DL,0AH;	换行
+	;MOV AH,2
+	;INT 21H
+	;MOV DL,0DH
+	;INT 21H
+	
+	CMP AL,41H;小于65结束
+	JB L2
+
+	CMP AL,5BH;小于90输出
+	JB L1
+
+	CMP AL,61H;小于97结束
+	JB L2
+	
+	CMP AL,7BH;小于122输出
+	JB L1
+	
+
+L2:LEA DX,STR3
+	MOV AH,09H
+	INT 21H
+	jmp exit
+
+L1:LEA DX,STR2
+	MOV AH,09H
+	INT 21H
+		
+
+EXIT:MOV AH,4CH
+	INT 21H 
+CODE ENDS
+	END START 
